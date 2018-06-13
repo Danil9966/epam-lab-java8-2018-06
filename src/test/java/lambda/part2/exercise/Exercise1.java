@@ -18,7 +18,7 @@ public class Exercise1 {
     public void ageExtractorFromPersonUsingMethodReference() {
         Person person = new Person("Иван", "Мельников", 33);
 
-        Function<Person, Integer> ageExtractor = x -> x.getAge();
+        Function<Person, Integer> ageExtractor = Person::getAge;
 
         assertEquals(33, ageExtractor.apply(person).intValue());
     }
@@ -38,7 +38,7 @@ public class Exercise1 {
     }
 
     private static String getFullName(Person person) {
-        return person.getFirstName() + person.getLastName();
+        return person.getFirstName() + " " + person.getLastName();
     }
 
     private static BiFunction<Person,Person, Integer> createExtractorAgeOfPersonWithTheLongestFullName() {
