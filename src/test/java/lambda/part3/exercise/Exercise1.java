@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static org.junit.Assert.assertEquals;
 
@@ -21,11 +24,24 @@ public class Exercise1 {
         List<Integer> lengths = new ArrayList<>();
 
         // TODO функция извлечения информации о человеке из объекта сотрудника personExtractor: Employee -> Person
+        Function<Employee, Person> personExtractor = Employee::getPerson;
         // TODO функция извлечения полного имени из информации о человеке fullNameExtractor: Person -> String
+        BiFunction<Employee, Function<Employee, Person>, String> fullNameExtractor
+                = (employee, personExtractor1) -> {
+            Person person = personExtractor1.apply(employee);
+            return person.getFirstName() + " " + person.getLastName();
+        };
         // TODO функция извлечения длины из строки stringLengthExtractor: String -> Integer
+        Function<String, Integer> stringLengthExtractor = String::length;
         // TODO функция извлечения длины полного имени из сотрудника fullNameLengthExtractor: Employee -> Integer
-        // TODO преобразование списка employees в lengths используя fullNameLengthExtractor
-
+        Function<Employee, Integer> fullNameLengthExtractor
+                = employee -> stringLengthExtractor.apply(fullNameExtractor.apply(employee, personExtractor));
+//        // TODO преобразование списка employees в lengths используя fullNameLengthExtractor
+        Consumer<Employee> employeeConsumer = employee -> {
+            Integer length = fullNameLengthExtractor.apply(employee);
+            lengths.add(length);
+        };
+        employees.forEach(employeeConsumer);
         assertEquals(Arrays.asList(14, 19, 14, 15, 14, 16), lengths);
     }
 
