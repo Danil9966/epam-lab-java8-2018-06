@@ -32,8 +32,14 @@ public class Exercise3 {
     @Test
     public void sortPersonsByLastNameThenFirstNameUsingArraysSortExpressionLambda() {
         Person[] persons = getPersons();
-        Arrays.sort(persons, Comparator.comparing(Person::getLastName)
-                .thenComparing(Person::getFirstName));
+        Arrays.sort(persons, (o1, o2) -> {
+            int lastNameComparing = o1.getLastName()
+                    .compareTo(o2.getLastName());
+            int firstNameComparing = o1.getFirstName()
+                    .compareTo(o2.getFirstName());
+            return lastNameComparing == 0 ? firstNameComparing
+                    : lastNameComparing;
+        });
         // TODO использовать Arrays.sort + statement-lambda
 
         assertArrayEquals(new Person[]{
