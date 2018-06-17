@@ -1,5 +1,6 @@
 package streams.part1.exercise;
 
+import java.util.stream.Collectors;
 import lambda.data.Employee;
 import lambda.data.JobHistoryEntry;
 import lambda.data.Person;
@@ -16,14 +17,19 @@ public class Exercise1 {
     public void findPersonsEverWorkedInEpam() {
         List<Employee> employees = getEmployees();
 
-        // TODO реализация, использовать Collectors.toList()
-        List<Person> personsEverWorkedInEpam = null;
+        List<Person> personsEverWorkedInEpam = employees
+            .stream()
+            .filter(employee -> employee.getJobHistory()
+                .stream()
+                .anyMatch(jobHistoryEntry -> "EPAM".equals(jobHistoryEntry.getEmployer())))
+            .map(Employee::getPerson)
+            .collect(Collectors.toList());
 
         List<Person> expected = Arrays.asList(
-                employees.get(0).getPerson(),
-                employees.get(1).getPerson(),
-                employees.get(4).getPerson(),
-                employees.get(5).getPerson());
+            employees.get(0).getPerson(),
+            employees.get(1).getPerson(),
+            employees.get(4).getPerson(),
+            employees.get(5).getPerson());
         assertEquals(expected, personsEverWorkedInEpam);
     }
 
@@ -31,13 +37,17 @@ public class Exercise1 {
     public void findPersonsBeganCareerInEpam() {
         List<Employee> employees = getEmployees();
 
-        // TODO реализация, использовать Collectors.toList()
-        List<Person> startedFromEpam = null;
+        List<Person> startedFromEpam = employees
+            .stream()
+            .filter(employee -> "EPAM".equals(employee.getJobHistory()
+                .get(0).getEmployer()))
+            .map(Employee::getPerson)
+            .collect(Collectors.toList());
 
         List<Person> expected = Arrays.asList(
-                employees.get(0).getPerson(),
-                employees.get(1).getPerson(),
-                employees.get(4).getPerson());
+            employees.get(0).getPerson(),
+            employees.get(1).getPerson(),
+            employees.get(4).getPerson());
         assertEquals(expected, startedFromEpam);
     }
 
@@ -45,8 +55,11 @@ public class Exercise1 {
     public void findAllCompanies() {
         List<Employee> employees = getEmployees();
 
-        // TODO реализация, использовать Collectors.toSet()
-        Set<String> companies = null;
+        Set<String> companies = employees
+            .stream()
+            .flatMap(employee -> employee.getJobHistory().stream())
+            .map(JobHistoryEntry::getEmployer)
+            .collect(Collectors.toSet());
 
         Set<String> expected = new HashSet<>();
         expected.add("EPAM");
@@ -61,52 +74,56 @@ public class Exercise1 {
     public void findMinimalAgeOfEmployees() {
         List<Employee> employees = getEmployees();
 
-        // TODO реализация
-        Integer minimalAge = null;
+        Integer minimalAge = employees
+            .stream()
+            .map(Employee::getPerson)
+            .min(Comparator.comparingInt(Person::getAge))
+            .map(Person::getAge)
+            .get();
 
         assertEquals(21, minimalAge.intValue());
     }
 
     private static List<Employee> getEmployees() {
         return Arrays.asList(
-                new Employee(
-                        new Person("Иван", "Мельников", 30),
-                        Arrays.asList(
-                                new JobHistoryEntry(2, "dev", "EPAM"),
-                                new JobHistoryEntry(1, "dev", "google")
-                        )),
-                new Employee(
-                        new Person("Александр", "Дементьев", 28),
-                        Arrays.asList(
-                                new JobHistoryEntry(1, "tester", "EPAM"),
-                                new JobHistoryEntry(1, "dev", "EPAM"),
-                                new JobHistoryEntry(1, "dev", "google")
-                        )),
-                new Employee(
-                        new Person("Дмитрий", "Осинов", 40),
-                        Arrays.asList(
-                                new JobHistoryEntry(3, "QA", "yandex"),
-                                new JobHistoryEntry(1, "QA", "mail.ru"),
-                                new JobHistoryEntry(1, "dev", "mail.ru")
-                        )),
-                new Employee(
-                        new Person("Анна", "Светличная", 21),
-                        Collections.singletonList(
-                                new JobHistoryEntry(1, "tester", "T-Systems")
-                        )),
-                new Employee(
-                        new Person("Игорь", "Толмачёв", 50),
-                        Arrays.asList(
-                                new JobHistoryEntry(5, "tester", "EPAM"),
-                                new JobHistoryEntry(6, "QA", "EPAM")
-                        )),
-                new Employee(
-                        new Person("Иван", "Александров", 33),
-                        Arrays.asList(
-                                new JobHistoryEntry(2, "QA", "T-Systems"),
-                                new JobHistoryEntry(3, "QA", "EPAM"),
-                                new JobHistoryEntry(1, "dev", "EPAM")
-                        ))
+            new Employee(
+                new Person("Иван", "Мельников", 30),
+                Arrays.asList(
+                    new JobHistoryEntry(2, "dev", "EPAM"),
+                    new JobHistoryEntry(1, "dev", "google")
+                )),
+            new Employee(
+                new Person("Александр", "Дементьев", 28),
+                Arrays.asList(
+                    new JobHistoryEntry(1, "tester", "EPAM"),
+                    new JobHistoryEntry(1, "dev", "EPAM"),
+                    new JobHistoryEntry(1, "dev", "google")
+                )),
+            new Employee(
+                new Person("Дмитрий", "Осинов", 40),
+                Arrays.asList(
+                    new JobHistoryEntry(3, "QA", "yandex"),
+                    new JobHistoryEntry(1, "QA", "mail.ru"),
+                    new JobHistoryEntry(1, "dev", "mail.ru")
+                )),
+            new Employee(
+                new Person("Анна", "Светличная", 21),
+                Collections.singletonList(
+                    new JobHistoryEntry(1, "tester", "T-Systems")
+                )),
+            new Employee(
+                new Person("Игорь", "Толмачёв", 50),
+                Arrays.asList(
+                    new JobHistoryEntry(5, "tester", "EPAM"),
+                    new JobHistoryEntry(6, "QA", "EPAM")
+                )),
+            new Employee(
+                new Person("Иван", "Александров", 33),
+                Arrays.asList(
+                    new JobHistoryEntry(2, "QA", "T-Systems"),
+                    new JobHistoryEntry(3, "QA", "EPAM"),
+                    new JobHistoryEntry(1, "dev", "EPAM")
+                ))
         );
     }
 }
