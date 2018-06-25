@@ -6,6 +6,7 @@ import lambda.data.Person;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
@@ -17,9 +18,19 @@ public class Exercise1 {
         List<Employee> employees = getEmployees();
 
         // TODO реализация
-        Long hours = null;
+        Long years = employees.stream()
+                .flatMapToLong(e->
+                        e.getJobHistory().stream()
+                        .mapToLong(j -> {
+                            if(j.getEmployer().equals("EPAM"))
+                                return (j.getDuration());
+                            return 0;
+                            }))
+                .sum();
 
-        assertEquals(19, hours.longValue());
+        ;
+
+        assertEquals(19, years.longValue());
     }
 
     @Test
@@ -27,7 +38,11 @@ public class Exercise1 {
         List<Employee> employees = getEmployees();
 
         // TODO реализация
-        Set<Person> workedAsQa = null;
+        Set<Person> workedAsQa = employees.stream()
+                .filter(e -> e.getJobHistory().stream()
+                        .anyMatch(job -> job.getPosition().equals("QA")))
+                .map(employee -> employee.getPerson())
+                .collect(Collectors.toSet());
 
         assertEquals(new HashSet<>(Arrays.asList(
                 employees.get(2).getPerson(),

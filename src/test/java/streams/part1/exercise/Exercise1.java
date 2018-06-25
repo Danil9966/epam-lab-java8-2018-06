@@ -6,6 +6,7 @@ import lambda.data.Person;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
@@ -17,7 +18,11 @@ public class Exercise1 {
         List<Employee> employees = getEmployees();
 
         // TODO реализация, использовать Collectors.toList()
-        List<Person> personsEverWorkedInEpam = null;
+        List<Person> personsEverWorkedInEpam = employees.stream()
+                                                        .filter(p-> p.getJobHistory().stream()
+                                                                .anyMatch(jE -> jE.getEmployer().equals("EPAM")))
+                                                        .map(emp->emp.getPerson())
+                                                        .collect(Collectors.toList());
 
         List<Person> expected = Arrays.asList(
                 employees.get(0).getPerson(),
@@ -32,7 +37,10 @@ public class Exercise1 {
         List<Employee> employees = getEmployees();
 
         // TODO реализация, использовать Collectors.toList()
-        List<Person> startedFromEpam = null;
+        List<Person> startedFromEpam = employees.stream()
+                .filter(p-> p.getJobHistory().get(0).getEmployer().equals("EPAM"))
+                .map(emp->emp.getPerson())
+                .collect(Collectors.toList());
 
         List<Person> expected = Arrays.asList(
                 employees.get(0).getPerson(),
@@ -62,7 +70,11 @@ public class Exercise1 {
         List<Employee> employees = getEmployees();
 
         // TODO реализация
-        Integer minimalAge = null;
+        Integer minimalAge = employees.stream()
+                .mapToInt(e -> e.getPerson()
+                        .getAge())
+                .min()
+                .getAsInt();
 
         assertEquals(21, minimalAge.intValue());
     }

@@ -28,7 +28,7 @@ public class Exercise1 {
         candidates.put(alex, Status.PENDING);
         candidates.put(ivan, Status.PENDING);
         candidates.put(helen, Status.PENDING);
-
+        candidates.forEach(((person,__) -> candidates.compute(person,(k,v)->(k.getAge()>21? Status.ACCEPTED : Status.DECLINED))));
         // TODO реализация
 
         assertEquals(Status.ACCEPTED, candidates.get(ivan));

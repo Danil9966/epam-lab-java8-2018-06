@@ -5,6 +5,7 @@ import lambda.data.JobHistoryEntry;
 import lambda.data.Person;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -16,20 +17,26 @@ import static org.junit.Assert.assertEquals;
 public class Exercise3 {
 
     private static class LazyMapHelper<T, R> {
+        List<T> source;
+        Function<T,R> accumulus ;
 
+        private LazyMapHelper(List<T> source, Function accumulus){
+            this.source = source;
+            this.accumulus = accumulus;
+        }
         public static <T> LazyMapHelper<T, T> from(List<T> list) {
-            // TODO реализация
-            throw new UnsupportedOperationException();
+
+            return new LazyMapHelper<>(list,(__)->__);
         }
 
         public List<R> force() {
-            // TODO реализация
-            throw new UnsupportedOperationException();
-        }
+            List<R> result = new ArrayList<>();
+            source.forEach((elem) -> result.add(accumulus.apply(elem)));
+            return result;
+            }
 
         public <R2> LazyMapHelper<T, R2> map(Function<R, R2> mapping) {
-            // TODO реализация
-            throw new UnsupportedOperationException();
+            return new LazyMapHelper<>(source,accumulus.andThen(mapping));
         }
     }
 
@@ -37,13 +44,19 @@ public class Exercise3 {
     public void mapEmployeesToLengthOfTheirFullNamesUsingLazyMapHelper() {
         List<Employee> employees = getEmployees();
 
-        List<Integer> lengths = null;
-        // TODO                 LazyMapHelper.from(employees)
-        // TODO                              .map(Employee -> Person)
-        // TODO                              .map(Person -> String(full name))
-        // TODO                              .map(String -> Integer(length from string))
-        // TODO                              .getMapped();
+        List<Integer> lengths =
+                LazyMapHelper.from(employees)
+                        .map(employee -> employee.getPerson())
+                        .map(person -> person.getFullName())
+                        .map(name -> name.length())
+                        .force();
         assertEquals(Arrays.asList(14, 19, 14, 15, 14, 16), lengths);
+        if(Boolean.TRUE == new Boolean(true)){
+            System.out.println("hui");
+        }
+        else {
+            System.out.println("thats right");
+        }
     }
 
     private static List<Employee> getEmployees() {

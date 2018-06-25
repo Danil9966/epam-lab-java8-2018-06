@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
 import static org.junit.Assert.assertEquals;
 
@@ -19,7 +20,13 @@ public class Exercise1 {
     public void mapEmployeesToLengthOfTheirFullNames() {
         List<Employee> employees = getEmployees();
         List<Integer> lengths = new ArrayList<>();
+        Function<Employee,Person>personExtractor  = (employee)->employee.getPerson();
+        Function<Person,String>fullNameExtractor  = (person)->person.getFullName();
+        Function<String,Integer>stringLengthExtractor  = (name)->name.length();
+        Function<Employee,Integer>fullNameLengthExtractor  = (employee)->
+             personExtractor.andThen(fullNameExtractor).andThen(stringLengthExtractor).apply(employee);
 
+        employees.forEach((e)->lengths.add(fullNameLengthExtractor.apply(e)));
         // TODO функция извлечения информации о человеке из объекта сотрудника personExtractor: Employee -> Person
         // TODO функция извлечения полного имени из информации о человеке fullNameExtractor: Person -> String
         // TODO функция извлечения длины из строки stringLengthExtractor: String -> Integer
