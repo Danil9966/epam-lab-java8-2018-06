@@ -1,6 +1,5 @@
 package game.bounceball.view;
 
-import game.bounceball.model.Ball;
 import game.bounceball.model.Field;
 import game.bounceball.model.Point;
 
@@ -25,7 +24,7 @@ public class View {
 
     }
 
-    private void drawBall(Ball ball) {
+    private void drawBall(Point ball) {
 
     }
 }

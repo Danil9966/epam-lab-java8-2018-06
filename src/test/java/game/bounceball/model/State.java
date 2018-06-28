@@ -4,21 +4,21 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
-public class Model {
+public class State {
 
     private Field field;
     private Point finish;
     private Point ball;
     private Set<CheckPoint> checkPoints;
 
-    private Model(Field field, Point finish, Point ball, Set<CheckPoint> checkPoints) {
+    private State(Field field, Point finish, Point ball, Set<CheckPoint> checkPoints) {
         this.field = field;
         this.finish = finish;
         this.ball = ball;
         this.checkPoints = checkPoints;
     }
 
-    public static Model restore(Scanner input) {
+    public static State restore(Scanner input) {
         Field field = Field.restore(input);
         Point finish = Point.restore(input);
         Point ball = Point.restore(input);
@@ -29,6 +29,7 @@ public class Model {
             checkPoints.add(CheckPoint.restore(input));
         }
 
-        return new Model(field, finish, ball, checkPoints);
+        return new State(field, finish, ball, checkPoints);
     }
+
 }

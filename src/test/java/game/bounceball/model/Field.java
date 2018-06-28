@@ -1,18 +1,15 @@
 package game.bounceball.model;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
+import java.io.*;
+import java.util.Scanner;
 
-public class Field implements Externalizable  {
+public class Field {
 
-    private Sector[][] field;
+    private final Sector[][] field;
 
     private Field(Sector[][] field) {
         this.field = field;
     }
-
 
     /**
      *   0 1 2 3 4 Y
@@ -24,33 +21,22 @@ public class Field implements Externalizable  {
      * 5 . . . w .
      * X
      */
-    @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-        int numRows = field.length;
-        out.writeInt(numRows);
+    // TODO подумать над выделением в отдельный класс (стратегия?)
+    public static Field restore(Scanner input) {
+        int numRows = input.nextInt();
+        int numCollumns = input.nextInt();
 
-        int numCollumns = field[0].length;
-        out.writeInt(numCollumns);
-
-        for (Sector[] row : field) {
-            for (Sector sector : row) {
-                out.write(sector == Sector.WALL ? 1 : 0);
-
-            }
-        }
-    }
-
-    @Override
-    public void readExternal(ObjectInput in) throws IOException {
-        int numRows = in.readInt();
-        int numCollumns = in.readInt();
-        Sector[][] sectors = new Sector[numRows][numCollumns];
+        Sector[][] field = new Sector[numRows][numCollumns];
         for (int x = 0; x < numRows; ++x) {
             for (int y = 0; y < numCollumns; ++y) {
-                sectors[x][y] = in.read() == 1 ? Sector.WALL : Sector.GROUND;
+                field[x][y] = input.nextInt() == 1 ? Sector.WALL : Sector.GROUND;
             }
         }
-        field = sectors;
+        return new Field(field);
+    }
+
+    public static void save(OutputStream output) {
+
     }
 
     public enum Sector {

@@ -1,17 +1,25 @@
 package game.bounceball.model;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
+import java.util.Scanner;
 
-public class CheckPoint implements Externalizable {
+public class CheckPoint {
 
     private Point point;
     private boolean checked = false;
 
     public CheckPoint(Point point) {
+        this(point, false);
+    }
+
+    private CheckPoint(Point point, boolean checked) {
+        this.checked = checked;
         this.point = point;
+    }
+
+    public static CheckPoint restore(Scanner input) {
+        Point point = Point.restore(input);
+        boolean checked = input.nextBoolean();
+        return new CheckPoint(point, checked);
     }
 
     public Point getPoint() {
@@ -20,17 +28,5 @@ public class CheckPoint implements Externalizable {
 
     public boolean isChecked() {
         return checked;
-    }
-
-    @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(point);
-        out.writeBoolean(checked);
-    }
-
-    @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        point = (Point) in.readObject();
-        checked = in.readBoolean();
     }
 }
