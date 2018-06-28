@@ -4,16 +4,16 @@ import java.util.Scanner;
 
 public class CheckPoint {
 
-    private Point point;
+    private Point position;
     private boolean checked = false;
 
-    public CheckPoint(Point point) {
-        this(point, false);
+    public CheckPoint(Point position) {
+        this(position, false);
     }
 
-    private CheckPoint(Point point, boolean checked) {
+    private CheckPoint(Point position, boolean checked) {
         this.checked = checked;
-        this.point = point;
+        this.position = position;
     }
 
     public static CheckPoint restore(Scanner input) {
@@ -22,11 +22,15 @@ public class CheckPoint {
         return new CheckPoint(point, checked);
     }
 
-    public Point getPoint() {
-        return point;
+    public Point getPosition() {
+        return position;
     }
 
     public boolean isChecked() {
         return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }

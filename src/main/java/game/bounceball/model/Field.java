@@ -11,6 +11,18 @@ public class Field {
         this.field = field;
     }
 
+    public int getNumRows() {
+        return field.length;
+    }
+
+    public int getNumColumns() {
+        return field[0].length;
+    }
+
+    public Sector getSector(int x, int y) {
+        return field[x][y];
+    }
+
     /**
      *   0 1 2 3 4 Y
      * 0 . . . . .
@@ -24,12 +36,12 @@ public class Field {
     // TODO подумать над выделением в отдельный класс (стратегия?)
     public static Field restore(Scanner input) {
         int numRows = input.nextInt();
-        int numCollumns = input.nextInt();
+        int numColumns = input.nextInt();
 
-        Sector[][] field = new Sector[numRows][numCollumns];
+        Sector[][] field = new Sector[numRows][numColumns];
         for (int x = 0; x < numRows; ++x) {
-            for (int y = 0; y < numCollumns; ++y) {
-                field[x][y] = input.nextInt() == 1 ? Sector.WALL : Sector.GROUND;
+            for (int y = 0; y < numColumns; ++y) {
+                field[x][y] = input.next().equals("w") ? Sector.WALL : Sector.GROUND;
             }
         }
         return new Field(field);
