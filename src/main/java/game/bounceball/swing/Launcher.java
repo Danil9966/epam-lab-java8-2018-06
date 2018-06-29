@@ -14,54 +14,36 @@ import java.util.Scanner;
 
 public class Launcher {
 
-    public static void main(String[] args) throws FileNotFoundException {
-        JFrame mainFrame = new JFrame();
-        mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(Launcher::createAndShowGUI);
+    }
 
+    private static void createAndShowGUI() {
         JPanel rootPanel = new JPanel();
         rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.Y_AXIS));
         rootPanel.setPreferredSize(new Dimension(400, 560));
 
         JPanel canvas = new JPanel();
         canvas.setPreferredSize(new Dimension(400, 440));
-
         rootPanel.add(canvas, BorderLayout.CENTER);
 
-        JPanel controls = new JPanel(null);
+        ControlPanel controls = new ControlPanel();
         controls.setPreferredSize(new Dimension(400, 120));
-
-        JButton up = new JButton("↑");
-        up.setBounds(190, 10, 30, 30);
-        up.setFocusPainted(false);
-        up.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
-        controls.add(up);
-
-        JButton right = new JButton("→");
-        right.setBounds(220, 40, 30, 30);
-        right.setFocusPainted(false);
-        right.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
-        controls.add(right);
-
-        JButton down = new JButton("↓");
-        down.setBounds(190, 70, 30, 30);
-        down.setFocusPainted(false);
-        down.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
-        controls.add(down);
-
-        JButton left = new JButton("←");
-        left.setBounds(160, 40, 30, 30);
-        left.setFocusPainted(false);
-        left.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
-        controls.add(left);
-
         rootPanel.add(controls, BorderLayout.SOUTH);
 
+        JFrame mainFrame = new JFrame();
+        mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainFrame.setContentPane(rootPanel);
         mainFrame.pack();
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
 
-        Scanner scanner = new Scanner(new File("field1.dat"));
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(new File("field1.dat"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         Model model = Model.restore(scanner);
 
         View view = new View();
@@ -69,13 +51,11 @@ public class Launcher {
 
         Controller controller = new Controller(model, view);
 
-        up.addActionListener(e -> controller.moveUp());
-        down.addActionListener(e -> controller.moveDown());
-        left.addActionListener(e -> controller.moveLeft());
-        right.addActionListener(e -> controller.moveRight());
+        controls.addUpButtonListener(e -> controller.moveUp());
+        controls.addRightButtonListener(e -> controller.moveRight());
+        controls.addDownButtonListener(e -> controller.moveDown());
+        controls.addLeftButtonListener(e -> controller.moveLeft());
 
-        canvas.setFocusable(true);
-        canvas.grabFocus();
         canvas.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent event) {
