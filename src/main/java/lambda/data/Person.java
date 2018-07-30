@@ -2,7 +2,9 @@ package lambda.data;
 
 import lombok.SneakyThrows;
 
+import java.io.IOException;
 import java.sql.Time;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -60,7 +62,14 @@ public class Person {
             && Objects.equals(lastName, person.lastName);
     }
 
-
+    public static void main(String[] args) {
+        Boolean b = true;
+        int i=10;
+        String str ="helo";
+        assert(b==true):"true";
+        assert (i!=10):"false";
+        System.out.println(str);
+    }
 
     @Override
     public int hashCode() {

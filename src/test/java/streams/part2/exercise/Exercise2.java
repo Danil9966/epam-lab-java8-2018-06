@@ -6,6 +6,7 @@ import lambda.data.Person;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
@@ -68,7 +69,20 @@ public class Exercise2 {
     public void employersStuffList() {
         List<Employee> employees = getEmployees();
 
-        Map<String, Set<Person>> result = null;
+        Map<String, Set<Person>> result = employees.stream()
+                .flatMap(e->new e.getJobHistory().stream());collect(Collectors.toMap(e->e.getJobHistory().get(0).getPosition(),
+                        e->{Set<Person> res = new HashSet<>();
+                            res.add(e.getPerson());
+                            return res;
+                        }
+                        , (m1,m2)->{
+
+                            Set<Person> res = new HashSet<>();
+                            res.addAll(m1);
+                            res.addAll(m2);
+                            return res;
+                        }
+                ));
 
         Map<String, Set<Person>> expected = new HashMap<>();
         expected.put("yandex", new HashSet<>(Collections.singletonList(employees.get(2).getPerson())));

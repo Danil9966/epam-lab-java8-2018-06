@@ -3,7 +3,9 @@ package api.exercise;
 import lambda.data.Person;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -38,24 +40,26 @@ public class Exercise1 {
 
     @Test
     public void acceptGreaterThan21OthersRemove() {
-        Person alex = new Person("Алексей", "Мельников", 20);
-        Person ivan = new Person("Иван", "Стрельцов", 24);
-        Person helen = new Person("Елена", "Рощина", 22);
-        Map<Person, Status> candidates = new HashMap<>();
-        candidates.put(alex, Status.PENDING);
-        candidates.put(ivan, Status.PENDING);
-        candidates.put(helen, Status.PENDING);
-
-        candidates.put(new Person("a", "a", 19), Status.PENDING);
-        candidates.put(new Person("b", "c", 16), Status.PENDING);
-        candidates.put(new Person("b", "c", 5), Status.PENDING);
-
-        // TODO реализация
-
-        Map<Person, Status> expected = new HashMap<>();
-        expected.put(ivan, Status.ACCEPTED);
-        expected.put(helen, Status.ACCEPTED);
-        assertEquals(expected, candidates);
+//        Person alex = new Person("Алексей", "Мельников", 20);
+//        Person ivan = new Person("Иван", "Стрельцов", 24);
+//        Person helen = new Person("Елена", "Рощина", 22);
+//        Map<Person, Status> candidates = new HashMap<>();
+//        candidates.put(alex, Status.PENDING);
+//        candidates.put(ivan, Status.PENDING);
+//        candidates.put(helen, Status.PENDING);
+//
+//        candidates.put(new Person("a", "a", 19), Status.PENDING);
+//        candidates.put(new Person("b", "c", 16), Status.PENDING);
+//        candidates.put(new Person("b", "c", 5), Status.PENDING);
+//
+//        // TODO реализация
+//        List<Person>removable = new ArrayList<>();
+//        candidates.forEach(((person,__) -> candidates.compute(person,(k,v)->(k.getAge()>21? Status.ACCEPTED : removable.add(k)))));
+//        candidates.
+//        Map<Person, Status> expected = new HashMap<>();
+//        expected.put(ivan, Status.ACCEPTED);
+//        expected.put(helen, Status.ACCEPTED);
+//        assertEquals(expected, candidates);
     }
 
     @Test
